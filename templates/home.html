@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %} Home {% endblock title %}
+    
+    
+
+
+ 
+{% block banner %} 
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'images/banner/b1.jpg' %}" class="d-block w-100" alt="banner1">
+      </div>
+      <div class="carousel-item ">
+        <img src="{% static 'images/banner/b2.jpg' %}" class="d-block w-100" alt="banner2">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banner/b3.jpg' %}" class="d-block w-100" alt="banner3">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banner/b4.jpg' %}" class="d-block w-100" alt="banner4">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+ {% endblock banner %}
+
+ 
+ {% block information %} 
+<div class="container" >
+    <div class="row bg-success text-center p-5 text-white border-bottom shadow">
+        <h1>Products</h1>
+        <small class="fs-5">
+               We offers a wide range of products in both liquid milk 
+                and by-product categories. The liquid milk comprises of 5 types of 
+                variants and the by-product comprises of 14 types of variants.
+               
+            A wide range of milk products comprising of fresh milk,
+                Butter,Ghee,Paneer,Curd,Flavoured Milk, Doodh Peda ,Ice cream and skimmed milk powder.
+        </small>
+    </div>
+</div>
+
+
+ {% endblock information %}
+
+
+
+
+{% block main %}
+<div class="container">
+  <hr style="border: 2px solid #3498db; width: 50%; margin: 20px auto;">
+
+  <h1 class="text-center" style="color: green; font-family: 'Arial', sans-serif; font-size: 28px; font-weight: bold;">Our Dairy Products</h1>
+  
+  <hr style="border: 2px solid #3498db; width: 50%; margin: 20px auto;">
+  
+    <br><br>
+    <div class="row container">
+
+      
+
+
+      {% for product in producthome %}
+    <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;">
+        <div class="goodnessec buttermilk smbg">
+            <a href="{% url 'category_with_slug' product.category.slug %}" class="text-decoration-none">
+                <div class="goodnesseccount text-center">
+                    <img src="{{ product.product_image.url }}" style="height: 200px;" class="img-fluid" alt="pic">
+                    <p class="mlkpro mt-3">{{ product.title }}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %} 
+       
+
+
+        </div>
+        <br><br>
+        {% comment %} <div class="row container">
+      
+          <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;" >
+              <div class="goodnessec buttermilk smbg">
+                  <a href="{% url 'category_with_slug' 'MS' %}" class="text-decoration-none">
+                    <div class="goodnesseccount text-center ">
+                      <img src="{% static 'images/product/milk-shake-chocolate.png' %}"  style="height: 200px;" class="img-fluid"   alt="pic" >
+                   <p class="mlkpro mt-3" > MILK SHAKE </p> 
+                  </div>
+                  </a>
+              </div>
+          </div>
+              
+          <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;" >
+              <div class="goodnessec buttermilk curdbgpro">
+                  <a href="{% url 'category_with_slug' 'ML' %}" class="text-decoration-none">
+                    <div class="goodnesseccount text-center">
+                      <img src="{% static 'images/product/cow-milk.png' %}"  style="height: 200px;"  class="img-fluid"   alt="pic" >
+                   <p class="mlkpro mt-3 " >  MILK</p> 
+                  </div>
+                  </a>
+              </div>
+          </div>
+          <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;" >
+              <div class="goodnessec buttermilk buttermilk">
+                  <a href="{% url 'category_with_slug' 'IC' %}"  class="text-decoration-none">
+                    <div class="goodnesseccount text-center ">
+                      <img src="{% static 'images/product/icbars.png' %}"  style="height: 200px;"  class="img-fluid"   alt="pic" >
+                   <p class="mlkpro mt-3" >ICE BARS</p> 
+                  </div>
+                  </a>
+              </div>
+          </div>
+          
+  
+  
+          </div>
+          <br><br>
+          <div class="row container">
+      
+            <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;" >
+                <div class="goodnessec buttermilk smbg">
+                    <a href="{% url 'category_with_slug' 'LS' %}" class="text-decoration-none">
+                      <div class="goodnesseccount text-center ">
+                        <img src="{% static 'images/product/sweet-lassi.png' %}"  style="height: 200px;" class="img-fluid"   alt="pic" >
+                     <p class="mlkpro mt-3" > LASSI</p> 
+                    </div>
+                    </a>
+                </div>
+            </div>
+                
+            <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;" >
+                <div class="goodnessec buttermilk curdbgpro">
+                    <a href="{% url 'category_with_slug' 'PN' %}" class="text-decoration-none">
+                      <div class="goodnesseccount text-center">
+                        <img src="{% static 'images/product/paneer-fresh.png' %}"  style="height: 200px;"  class="img-fluid"   alt="pic" >
+                     <p class="mlkpro mt-3 " >PANEER</p> 
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" style="animation-duration: 1s;animation-delay: 0.6s;animation-name: none;" >
+                <div class="goodnessec buttermilk buttermilk">
+                    <a href="{% url 'category_with_slug' 'CZ' %}"  class="text-decoration-none">
+                      <div class="goodnesseccount text-center ">
+                        <img src="{% static 'images/product/processedcheese.png' %}"  style="height: 200px;"  class="img-fluid"   alt="pic" >
+                     <p class="mlkpro mt-3" >CHEESE</p> 
+                    </div>
+                    </a>
+                </div>
+            </div>
+            
+    
+    
+            </div> {% endcomment %}
+
+        <!-- divrow container end -->
+    </div>
+</div>
+
+<br><br>
+
+<!-- <hr>
+<div class="homefooter bg-success text-light " style="display: flex; justify-content: space-around;" >
+
+  <div class="first text-center"> 
+    <h5>About Us</h5>
+    <p>At Diary Products, we take pride in delivering the purest and finest dairy products straight from our farm to your table. As a dedicated and passionate dairy product company, we are committed to providing you with wholesome goodness, ensuring every product meets the highest quality standards.</p>
+  </div>
+  <div class="second">
+    <h5>Mission</h5>
+    <p>Our mission is to deliver unparalleled dairy excellence by embracing the timeless values of quality, sustainability, and community. We are dedicated to providing families and individuals with nourishing, farm-fresh dairy products that not only delight the taste buds but also contribute to a healthier, more sustainable world.</p>
+  </div>
+  <div class="third">
+    <h5>Our Story</h5>
+    <p>Founded with a vision to bring farm-fresh goodness to households across the country, Diary Products has a rich heritage rooted in agriculture and a deep appreciation for the land. Our journey began with a small family farm, where we nurtured our cows with love and care, ensuring they lead happy and healthy lives.</p>
+  </div>
+
+</div> -->
+
+{% endblock main%}
+    

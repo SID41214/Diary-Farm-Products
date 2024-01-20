@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock title %}
+
+{% block main %}
+    <div class="container my-5">
+        <div class="row">
+            
+            {% if  cart %}
+
+            <h1 class="text-center mb-5">Shopping Cart</h1>
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Cart</h3>
+                        {% for item in cart %}
+                        <div class="row">
+                            <div class="col-sm-3 text-center align-self-center">
+                                <img src="{{item.product.product_image.url}}" alt="" class="img-fluid img-thumbnail shadow-sm" height="150" width="150" >
+
+                            </div>
+                            <div class="col-sm-9">
+                                <div>
+                                    <h5>{{item.product.title}} <small></small></h5>
+                                    <p class="mb-2 text-muted small">{{item.product.description}}</p>
+                                    <div class="my-3">
+                                        <label for="mquantity">Quantity : </label>
+                                        <a class="minus-cart btn" pid={{item.product.id}}> <i class="fas fa-minus-square fa-lg"></i></a>
+                                        <span class="mquantity" data-price="{{item.product.discounted_price}}" data-stock="{{item.product.stock_quantity}}">{{item.quantity}}</span>
+                                        <a class="plus-cart btn" pid={{item.product.id}}> <i class="fas fa-plus-square fa-lg"></i></a><br>
+                                        <small>Available stock : <span style="color: green;font-weight: 900;" class="stock-quantity">{{item.product.stock_quantity}}</span></small>
+                                        <div class="stock-warning" style="display: none; color: red;">Cannot add more than available stock!</div>
+                                        <br>
+                                        <small>Default Pack*(in ml) : <span style="color: green;" id="quantity"></span>  </small>
+                                        <br>
+                                        <small>*Only for selected dairy products</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="remove-cart btn btn-sm btn-secondary mr-3" pid={{item.product.id}}>Remove Item</a>
+                                        <p class="mb-0"> <span><strong class="">Rs. {{item.product.discounted_price}} </strong></span>  </p>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="text-muted">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>The Total Amount of </h3>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                Amount <span id="amount">Rs.{{amount}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">Shipping <span>Rs.40.00</span></li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                <div>
+                                    <strong>Total</strong><small>(including GST)</small>
+                                </div>
+                                <span id="totalamount"><strong>Rs.{{totalamount}}</strong></span>
+                            </li>
+                        </ul>
+                        <div class="d-grid">
+                            <a href="{% url 'checkout' %}" class="btn btn-primary" id="place-order-btn"> Place Order</a>
+                            <div id="place-order-warning" style="display: none; color: red;">Cannot proceed further. Please check your cart.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <h1 class="text-center mb-5">Cart is Empty</h1>
+            {% endif %}
+              
+        </div>
+    </div>
+<footer>
+    <div class="text-center fw-bold" >
+        *For bulk order and  wholesalers feel free to <a href="{% url 'contact' %}" class="text-success "> Contact Us</a></span>
+    </div>
+</footer>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var plusButtons = document.querySelectorAll('.plus-cart');
+        var placeOrderBtn = document.getElementById('place-order-btn');
+
+        plusButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var selectedQuantityElement = button.closest('.row').querySelector('.mquantity');
+                var stockQuantity = parseInt(selectedQuantityElement.getAttribute('data-stock'));
+
+                var selectedQuantity = parseInt(selectedQuantityElement.innerText) || 0;
+                var selectedPrice = parseFloat(selectedQuantityElement.getAttribute('data-price')) || 0.00;
+
+                selectedQuantity += 1;
+
+                var stockWarning = button.closest('.row').querySelector('.stock-warning');
+
+                if (selectedQuantity > stockQuantity) {
+                    stockWarning.style.display = 'block';
+                    placeOrderBtn.disabled = true;
+                } else {
+                    stockWarning.style.display = 'none';
+                    placeOrderBtn.disabled = false;
+                }
+
+                selectedQuantityElement.innerText = selectedQuantity;
+                button.closest('.row').querySelector('.amount').innerText = `Rs.${selectedPrice * selectedQuantity}`;
+                document.getElementById('totalamount').innerText = `Rs.${calculateTotalAmount()}`;
+            });
+        });
+
+        placeOrderBtn.addEventListener('click', function (event) {
+            if (placeOrderBtn.disabled) {
+                event.preventDefault();
+                var placeOrderWarning = document.getElementById('place-order-warning');
+                placeOrderWarning.style.display = 'block';
+            }
+        });
+
+        function calculateTotalAmount() {
+            var amounts = document.querySelectorAll('.amount');
+            var totalAmount = 0;
+
+            amounts.forEach(function (amountElement) {
+                totalAmount += parseFloat(amountElement.innerText.replace('Rs.', ''));
+            });
+
+            return totalAmount + 40; // Adding shipping cost
+        }
+    });
+</script>
+
+    <!-- <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var plusButtons = document.querySelectorAll('.plus-cart');
+
+            plusButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var selectedQuantityElement = button.closest('.row').querySelector('.mquantity');
+                    var stockQuantity = parseInt(selectedQuantityElement.getAttribute('data-stock'));
+
+                    var selectedQuantity = parseInt(selectedQuantityElement.innerText) || 0;
+                    var selectedPrice = parseFloat(selectedQuantityElement.getAttribute('data-price')) || 0.00;
+
+                    selectedQuantity += 1;
+
+                    var stockWarning = button.closest('.row').querySelector('.stock-warning');
+                    var placeOrderBtn = document.getElementById('place-order-btn');
+
+                    if (selectedQuantity > stockQuantity) {
+                        stockWarning.style.display = 'block';
+                        placeOrderBtn.disabled = true;
+                    } else {
+                        stockWarning.style.display = 'none';
+                        placeOrderBtn.disabled = false;
+                    }
+
+                    selectedQuantityElement.innerText = selectedQuantity;
+                    button.closest('.row').querySelector('.amount').innerText = `Rs.${selectedPrice * selectedQuantity}`;
+                    document.getElementById('totalamount').innerText = `Rs.${calculateTotalAmount()}`;
+                });
+            });
+
+            function calculateTotalAmount() {
+                var amounts = document.querySelectorAll('.amount');
+                var totalAmount = 0;
+
+                amounts.forEach(function (amountElement) {
+                    totalAmount += parseFloat(amountElement.innerText.replace('Rs.', ''));
+                });
+
+                return totalAmount + 40; // Adding shipping cost
+            }
+        });
+    </script> -->
+
+{% endblock main %}

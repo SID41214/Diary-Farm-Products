@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Log In  {% endblock title %}
+
+
+{% block main %}
+
+
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <h3 class="text-center fw-bold"> Login </h3>
+           
+            <hr>
+            <br>
+            <small ><strong> <span style="color: red;">For New Users :</span> </strong><span style="color: red;">Authenticate your account, log in using the link that has been sent to your email</span></small>
+            <form action="" method="post" novalidate class="shadow p-5">
+                {% csrf_token %}
+                
+                {% for fm  in form %}
+                    {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>  
+                    <br>                 
+                {% endfor %}
+                <input type="submit" class="btn btn-primary mt-4 mx-auto d-block "   value="Login">
+                
+                <small class="text-center d-block"><a href="{% url 'password_reset' %}"> Forgot Password ? </a></small>    
+                <br>
+                <div class="text-center text-primary fw-bold">
+                    <small>New User ? <a href="{% url 'customerregistration' %}" class="text-danger"> Create an Account</a></small>
+                </div>
+
+
+                
+                {% if form.non_field_errors %}
+                    {% for error in  form.non_field_errors %}
+                        <P class="alert alert-danger my-3">{{error}}</P>
+                    {% endfor %}
+                {% endif %}
+                
+                    
+                    
+                    
+                    
+
+            </form>
+
+        </div>
+    </div>
+</div>
+    
+{% endblock main %}
+    
+
+    
+
+    

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Checkout | Place Order
+{% endblock title %}
+
+{% block main %}
+    <div class="container">
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mt-5">
+            <div class="col-sm-6">
+                <h4>Order Summary</h4>
+                <hr>
+                {% for item in cart_items %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5>Product: {{ item.product.title }}</h5>
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p class="fw-bold">Price: {{ item.product.discounted_price }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <p class="fw-bold">Total Cost + Rs.40 = {{ totalamount }}</p>
+                <small>Term And Condition : </small><br>
+                <small>*Please follow general instructions when ordering items</small><br>
+                <small>*Normal Fixed Charge inc.GST and package ( Rs. 40 ) is included </small>
+            </div>
+
+            <div class="col-sm-4 offset-sm-1">
+                <h4>Select Shipping Address</h4>
+                <hr>
+                <form action="" method="post" id="myform">
+                    {% csrf_token %}
+                    {% for ad in add %}
+                        <div class="card" style="border: 2px solid green;">
+                            <div class="form-check mt-2 mb-5">
+                                <input
+                                style="background-color: black; border-color: green;"
+                                class="form-check-input"
+                                type="radio"
+                                name="custid"
+                                id="custadd-num"
+                                value="{{ ad.id }}"
+                                onchange="updateLastCheckedId(this.value)"
+                            >
+                                <label class="form-check-label fw-bold" for="custadd{{ forloop.counter }}">
+                                    Address: {{ forloop.counter }}
+                                </label>
+                            </div>
+                            <div class="card-body">
+                                <h5>{{ ad.name }}</h5>
+                                <h6>Mobile: {{ ad.mobile }}  </h6>
+                                <h6>{{ ad.state }} , {{ ad.locality }} ,{{ ad.city }}   </h6>
+                                <h6>Pincode: {{ ad.pincode}} </h6>
+                                
+                               
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-check mt-2 mb-5">
+                        <label for="totalamount" class="form-label"><strong>Total Amount:</strong></label>
+                        <!-- <input type="number" class="form-control font-weight-bold" name="totalamount" value="{{ totalamount }}" readonly> -->
+                        <h5 style="text-align: center;"><strong>Rs. {{ totalamount }} /-</strong> </h5>
+
+                    </div>
+
+                    <div class="text-end">
+                        <!-- <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button> -->
+                        <!-- <div id="paypal-button-container"></div> -->
+                        <button id="rzp-button1" type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+
+
+
+
+{% block paymentgateway %}
+
+<script>
+        var lastCheckedId = null;
+
+        function updateLastCheckedId(value) {
+            lastCheckedId = value;
+        }
+
+        // You can use lastCheckedId wherever you need it in your script
+   
+   // var custId = document.querySelector('input[name="custid"]:checked').value;
+
+    var options = {
+        "key": "rzp_test_QfzO7zxrkgmxML", // Enter the Key ID generated from the Dashboard
+        "amount": "{{razoramount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Dairy Products",
+        "description": "Purchase Product",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            console.log("succeess");
+            //var form = document.getElementById("myform");
+            //var custId = document.querySelector('input[name="custid"]:checked').value;
+            //window.location.href = 'http://localhost:8000/paymentdone?order_id=' + response.razorpay_order_id + '&payment_id=' + response.razorpay_payment_id + '&cust_id=' + custId;
+            var form = document.getElementById("myform"); 
+            console.log(form)
+           //alert(response.razorpay_payment_id);
+            //alert(response.razorpay_order_id);
+            //alert(response.razorpay_signature) 
+            //window.location.href = 'http://localhost:8000/paymentdone?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["custid"].value}'
+            //window.location.href = `/paymentdone/?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${custId}`;
+
+            window.location.href = `/paymentdone/?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${lastCheckedId}`;
+        },
+        "prefill": {
+            "name": "Sidheeque",
+            "email": "sid41214@gmail.com",
+            "contact": "9400758227"
+        },
+        "notes": {
+            "address": "Dairy Products Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+            //alert(response.error.code);
+            alert(response.error.description);
+            //alert(response.error.source);
+            //alert(response.error.step);
+            //alert(response.error.reason);
+            //alert(response.error.metadata.order_id);
+            //alert(response.error.metadata.payment_id);
+    });
+    //document.getElementById('rzp-button1').onclick = function(e){
+       // console.log("button click");
+      //  rzp1.open();
+      //  e.preventDefault();
+   // }
+   document.getElementById('rzp-button1').onclick = function (e) {
+    if (lastCheckedId === null) {
+        // If no address is selected, show an error message
+        alert("Please select a shipping address before proceeding with the payment.");
+    } else {
+        // If an address is selected, proceed with the payment
+        rzp1.open();
+    }
+    e.preventDefault();
+}
+</script>
+
+
+{% endblock paymentgateway %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Category{% endblock title %}
+
+
+
+
+
+
+
+
+
+
+
+ {% block main %}
+  <!-- <h1 style="text-align: center;">Categories:{{product}}</h1> -->
+  <!-- {% for product in products %}
+    
+    <p>{{ product.name }}</p>
+  {% endfor %} -->
+
+  <div class="container my-5">
+    
+    <div class="row">
+        <div class="col-sm-3">
+
+          <div class="list-group">
+            {% for val in title %}
+              <a href="{% url 'category-title' val.title %}" class="list-group-item list-group-item-action " aria-current="true">{{val.title}}</a>
+            {% endfor %}
+          </div>
+                  
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+              
+              {% for prod in product  %}
+                  <div class="col text-center mb-4">
+                    <a href="{% url 'product-detail' prod.id %}" class="btn">
+                      <div>
+                        <img src="{{prod.product_image.url}}" width="300px" height="200px" alt="product images"/>
+                        <div class="fw-bold">{{prod.title}}</div>
+                        <div class="fw-bold text-danger">
+                          Rs.{{prod.discounted_price}} /-
+                          <small class="fw-light text-decoration-line-through">{{prod.selling_price}}</small>
+                        </div>
+                      </div>
+                    </a>
+                  </div>              
+              {% endfor %}
+                
+            </div>
+
+        </div>
+            
+        
+    </div>
+
+  </div>
+{% endblock main %} 

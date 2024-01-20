@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} About{% endblock title %}
+    
+
+{% block banner %} 
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'images/banner/b1.jpg' %}" class="d-block w-100" alt="banner1 " >
+      </div>
+      <div class="carousel-item ">
+        <img src="{% static 'images/banner/b2.jpg' %}" class="d-block w-100" alt="banner2">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banner/b3.jpg' %}" class="d-block w-100" alt="banner3">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banner/b4.jpg' %}" class="d-block w-100" alt="banner4">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+ {% endblock banner %}
+
+
+
+
+
+{% block main %}
+    <div class="container mt-3">
+        <br>
+        <h2 class="text-center"> About Us </h2>
+        <br>
+        <div class="row container">
+            <p class="fs-4 text-center">
+                At Diary Products, we take pride in delivering the purest and finest dairy products straight from our farm to your table. As a dedicated and passionate dairy product company, we are committed to providing you with wholesome goodness, ensuring every product meets the highest quality standards.
+            </p>
+        </div>
+        <br><br>
+        <h2 class="text-center"> Mission </h2>
+        <div class="row container">
+            <p class="fs-4 text-center">
+                Our mission is to deliver unparalleled dairy excellence by embracing the timeless values of quality, sustainability, and community. We are dedicated to providing families and individuals with nourishing, farm-fresh dairy products that not only delight the taste buds but also contribute to a healthier, more sustainable world.
+            </p>
+        </div>
+        <br><br>
+        <h2 class="text-center"> Our Story </h2>
+        <div class="row container">
+            <p class="fs-4 text-center">
+                Founded with a vision to bring farm-fresh goodness to households across the country, Diary Products has a rich heritage rooted in agriculture and a deep appreciation for the land. Our journey began with a small family farm, where we nurtured our cows with love and care, ensuring they lead happy and healthy lives.
+            </p>
+        </div>
+
+    </div>
+
+
+<br><br>
+{% endblock main %}
+    

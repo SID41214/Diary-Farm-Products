@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Detail{% endblock title %}
+
+{% block main %}
+<style>
+    .variation-box {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        padding: 11px;
+    }
+</style>
+
+<div class="container">
+    <br><br>
+    <div class="row flex justify-content-between">
+        <div class="img2 col-lg-5 mt-5">
+            <img src="{{product.product_image.url}}" class="image col-xs-6 col-sm-12 col-lg-12 mt-3 text-sm-center w-100 h-75" alt="image">
+        </div>
+        <div class="productdetail col-lg-5">
+            <h1 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 50px;">
+                {{ product.title }}
+            </h1>
+            <h5 class="text-success fs-2">Rs. {{product.discounted_price}}/-</h5>
+            <small class="text-decoration-line-through text-danger fs-5"><del>Rs. {{product.selling_price}}/-</del></small>
+            <br><br><br>
+            <h2 style="font-family: 'Times New Roman', Times, serif;">Product Features</h2>
+            <ul class="fs-6" style="list-style: none; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                <li>{{product.description}}</li>
+                <li><strong style="color: green;">Composition : </strong>{{product.composition}}</li>
+                <li><strong style="color: green;">Application : </strong>{{product.prodapp}}</li>
+                <li><strong style="color: green;">MFD : </strong>{{product.manufactor_date}}</li>
+                <li><strong style="color: green;">UseBy* : </strong>{{product.useby_date}}</li>
+                <li><small>*Under prementioned condition</small></li>
+                <li><small>*On Default 1L Pack (if selected is unavailable )</small></li>
+            </ul>
+            <div style="display: flex; flex-wrap: wrap;">
+                {% for variation in variations %}
+                    <div class="variation-box mr-3 mb-3" data-price="{{ variation.discounted_price }}" data-selling-price="{{ variation.selling_price }}" data-quantity="{{ variation.quantity }}" data-id="{{ variation.id }}">
+                        <label>
+                            <input type="radio" name="variation" value="{{ variation.id }}" onchange="updateDisplayedInfo(this)">
+                            <strong>{{ variation.quantity }}</strong>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="variation-details">
+                <!-- Displayed details will be updated here -->
+            </div>
+            <div style="display: flex;">
+                <div class="one">
+                    <form action="{% url 'add-to-cart' %}" method="get" class="d-line" id="add-to-cart-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="prod_id" value="{{ product.id }}" />
+                        <input type="hidden" name="selected_variation_id" id="selected-variation-id" value="" />
+                        <input type="hidden" name="selected_quantity" id="selected-quantity" value="" />
+                        <input type="hidden" name="selected_price" id="selected-price" value="" />
+                        <input type="hidden" id="selected-discounted-price" name="selected_discounted_price" value="">
+                        <button type="button" onclick="addToCart()" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+                    </form>
+                    {% comment %} <form action="/add-to-cart"    class="d-line">
+                        <input type="hidden" name="prod_id" value={{product.id}} />
+                        <input type="hidden" name="selected_variation_id" id="selected-variation-id" value="" />
+                        <input type="hidden" name="selected_quantity" id="selected-quantity" value="" />
+                        <input type="hidden" name="selected_price" id="selected-price" value="" />
+                        <input type="hidden" id="selected-discounted-price" name="selected_discounted_price" value="">
+                       
+                        <button type="submit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+                    </form> {% endcomment %}
+                </div>
+                <div class="two">
+                    <a href="{% url 'showcart' %}" class="btn btn-warning shadow px-5 py-2 ms-4">Buy Now</a>
+                </div>
+                <div>
+                    {% if wishlist %}
+                        <a pid={{product.id}} class="minus-wishlist btn btn-danger shadow px-5 py-2 ms-4"><i class="fas fa-heart fa-lg"></i></a>
+                    {% else %}
+                        <a pid={{product.id}} class="plus-wishlist btn btn-success shadow px-5 py-2 ms-4"><i class="fas fa-heart fa-lg"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    function updateDisplayedInfo(radio) {
+        var variationBox = radio.closest('.variation-box');
+        var variationId = radio.value;
+        var price = variationBox.getAttribute('data-price');
+        var sellingPrice = variationBox.getAttribute('data-selling-price');
+        var quantity = variationBox.getAttribute('data-quantity');
+
+        document.getElementById('selected-quantity').value = quantity;
+        document.getElementById('selected-price').value = price;
+        document.getElementById('selected-discounted-price').value = price;
+
+        document.querySelector('.text-success').innerHTML = `Rs. ${price}/-`;
+        document.querySelector('.text-decoration-line-through').innerHTML = `<del>Rs. ${sellingPrice}/-</del>`;
+
+        document.getElementById('selected-variation-id').value = variationId;  // Updated this line
+    }
+
+    function addToCart() {
+        var form = document.getElementById('add-to-cart-form');
+        form.submit();
+    }
+</script>
+
+{% comment %} 
+<script>
+    function updateDisplayedInfo(radio) {
+        var variationBox = radio.closest('.variation-box');
+        var variationId = radio.value;  // Assuming the radio button value is the variation ID
+        var price = variationBox.getAttribute('data-price');
+        var sellingPrice = variationBox.getAttribute('data-selling-price');
+        var quantity = variationBox.getAttribute('data-quantity');
+
+        // Set the selected quantity, price, and discounted price to the hidden input fields
+        document.getElementById('selected-quantity').value = quantity;
+        document.getElementById('selected-price').value = price;
+        document.getElementById('selected-discounted-price').value = price;
+
+        // Update the displayed information for selling price and discounted price
+        document.querySelector('.text-success').innerHTML = `Rs. ${price}/-`;
+        document.querySelector('.text-decoration-line-through').innerHTML = `<del>Rs. ${sellingPrice}/-</del>`;
+
+        // Update the form action to include the selected variation
+        var form = document.querySelector('form[action="/add-to-cart/"]');
+        form.action = `/add-to-cart/${variationId}/`;  // Adjust this URL based on your actual URL pattern
+    }
+</script>
+ {% endcomment %}
+
+
+
+
+
+
+
+
+
+{% comment %} 
+<script>
+    function updateDisplayedInfo(radio) {
+        var variationBox = radio.closest('.variation-box');
+        var price = variationBox.getAttribute('data-price');
+        var sellingPrice = variationBox.getAttribute('data-selling-price');
+        var quantity = variationBox.getAttribute('data-quantity');
+
+        // Set the selected quantity, price, and discounted price to the hidden input fields
+        document.getElementById('selected-quantity').value = quantity;
+        document.getElementById('selected-price').value = price;
+        document.getElementById('selected-discounted-price').value = price;
+
+        // Update the displayed information for selling price and discounted price
+        document.querySelector('.text-success').innerHTML = `Rs. ${price}/-`;
+        document.querySelector('.text-decoration-line-through').innerHTML = `<del>Rs. ${sellingPrice}/-</del>`;
+    }
+</script> {% endcomment %}
+
+
+
+
+{% endblock main %} 

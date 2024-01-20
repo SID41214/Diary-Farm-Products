@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block main %}
+    <div class="container my-5">
+        <div class="row">
+            <h3>Welcome <span class="text-capitalize">{{request.user}}</span></h3>
+        
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'profile' %}" class="btn btn-primary">Profile</a></li>
+               <br> <li class="d-grid"><a href="{% url 'address' %}" class="btn ">Address</a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-8 offset-sm-1">
+            <form action="" method="post">
+                {% csrf_token %}
+                
+                {% for fm in form %}
+                    {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.error|striptags}}</small>
+                {% endfor %}
+
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary"> Submit </button>
+                </div>
+
+                
+                
+                {% if form.non_field_errors %}
+                    {% for error  in form.non_field_errors  %}
+                        <p class="alert alert-danger my-3">{{error}}</p>
+                    {% endfor %}
+                {% endif %}
+                        
+
+                
+                {% if messages %}
+                    
+                    {% for msg in  messages %}
+                        <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+                        
+                    {% endfor %}
+                            
+
+                {% endif %}
+                    
+                    
+                    
+
+                    
+                    
+            </form>
+        </div>
+        </div>
+
+
+
+    </div>
+
+
+{% endblock main %}
+    
+    
+
+    
