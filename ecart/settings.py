@@ -92,9 +92,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'diaryproduct',
-        'USER': 'mysuperuser',
-        'PASSWORD':'mysuperuser',
-        'HOST':'diaryproduct.c34q2ammephe.eu-north-1.rds.amazonaws.com',
+        'USER': config('USER'),
+        'PASSWORD':config('PASSWORD'),
+        'HOST':config('HOST'),
         'PORT':'5432',
         
     }
@@ -180,3 +180,12 @@ EMAIL_HOST_USER =config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =config('EMAIL_HOST_PASSWORD')
 
 
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_SIGNATURE_NAME = config('AWS_S3_SIGNATURE_NAME'),
+AWS_S3_REGION_NAME =  config('AWS_S3_REGION_NAME')
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
