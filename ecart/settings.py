@@ -77,13 +77,24 @@ WSGI_APPLICATION = 'ecart.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ecommercedb',
+#         'USER': config('USER'),
+#         'PASSWORD':config('PASSWORD'),
+#         'HOST':config('HOST'),
+#         'PORT':'5432',
+        
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommercedb',
-        'USER': config('USER'),
-        'PASSWORD':config('PASSWORD'),
-        'HOST':config('HOST'),
+        'NAME': 'diaryproduct',
+        'USER': 'mysuperuser',
+        'PASSWORD':'mysuperuser',
+        'HOST':'diaryproduct.c34q2ammephe.eu-north-1.rds.amazonaws.com',
         'PORT':'5432',
         
     }
