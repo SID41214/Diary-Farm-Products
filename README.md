@@ -2,6 +2,8 @@
 
 Welcome to the DiaryProducts E-commerce website, a meticulously crafted platform for all your dairy product needs. Our goal is to provide you with a seamless and enjoyable shopping experience. This website is powered by Python Django, HTML, CSS, JavaScript, and Bootstrap, ensuring a robust and user-friendly interface.
 
+Check the website in :  www.diaryproducts.shop 
+
 ## Features
 
 ### User Authentication and Profile Management
